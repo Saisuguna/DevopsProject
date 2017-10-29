@@ -1,7 +1,8 @@
 from requests.auth import HTTPBasicAuth
 import argparse
 import requests
-import jenkins
+import jenkins 
+import os, javaproperties
 from bs4 import BeautifulSoup
 
 server = jenkins.Jenkins('http://localhost:8080',username = 't.saisuguna', password = 'Jenkins@3d')
@@ -55,8 +56,19 @@ def test_CI(jobname):
 				
 				if rep_url:
 					print(" Repository URL: " + rep_url.string)
+
+					if get_repo_path(rep_url.string):
+						print(" Repository check: SUCCESS")	
+					else:
+						print(" Repository check: FAILURE")				
+
+					# Finding the type of repository
+					
 					rep_kind = soup.find('kind')
-					print (" Repository kind: " + rep_kind.string)
+				        if rep_kind:
+						print (" Repository kind: " + rep_kind.string)
+					else:
+						print ("Repository kind: Unknown")
 				else:
 					print (" No repository")
 
@@ -78,9 +90,19 @@ def test_CI(jobname):
 					# If build is running, then this code will run
 				else:
 					print(" Build is still running")
-		else:
-			print(" No build performed on this job")
+	else:
+		print(" No build performed on this job")
 	print ("\n Total number of builds: ", counter)
+
+def get_repo_path(path):
+	
+	# Checking input.properties file
+	with open('input.properties', 'rb') as f:
+		p = javaproperties.load(f)
+	if p['repo_path'] == ("\""+path+"\""):
+		return True
+	else:
+		return False
 
 def main():
 	parser = argparse.ArgumentParser()

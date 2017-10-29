@@ -218,3 +218,16 @@ sudo su -
 ls
 history | grep -i jenkins
 sudo su -
+ls
+mvn --version
+mvn -version
+history
+history | grep -i bs4
+history | grep -i bs
+history | grep -i b
+ls
+mvn -version
+mvn --version
+mvn --verision
+mvn -verision
+sudo su -
